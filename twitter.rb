@@ -1,4 +1,6 @@
 require 'twitter'
+require 'json'
+# require 'gmaps4rails'
 
 Twitter.configure do |config|
 	config.consumer_key = ""
@@ -10,30 +12,31 @@ end
 # Array for Handles 
 tweeter_array_1 = []
 
-# Array for Locations
+# Hash for Locations
 @MasterBlaster = {}
 
+#User Input Dialogue
+puts "What band or album do you want to look for?"
+@search_term = "#" + gets.chomp!
+puts "Cool. What is the Twitter handle of the band?"
+@search_handle = gets.chomp!
+puts "Cool.  Wait a second for the results."
+# puts @search_term
+# puts @search_handle
+
 # Use search to find handles
-Twitter.search("#Chromatics", :lang => "en", :count => 10).results.each do |tweet|
+Twitter.search("#{@search_term}", :lang => "en", :count => 50).results.each do |tweet|
    tweeter_array_1.push(tweet.from_user) 
 end
 
 # Find Twitter followers of an artist
-Twitter.followers("mrshaasha").each do |person|
-	if @MasterBlaster.has_key?(person.screen_name)
-  		
-  	else 
-  		@MasterBlaster[screen_name] = person.location
-  	end 
+Twitter.followers("#{@search_handle}").each do |guy|
+  @MasterBlaster[guy.screen_name] = guy.location.downcase!
 end
 
 # Find location based on handle
 tweeter_array_1.each do |handle|
-	if @MasterBlaster.has_key?(handle)
-  		
-  	else 
-  		@MasterBlaster[handle] = Twitter.user(handle).location.downcase!
-  	end
+  	@MasterBlaster[handle] = Twitter.user(handle).location.downcase!
 end
 
 puts @MasterBlaster
