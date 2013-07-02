@@ -78,7 +78,7 @@ m = "http://maps.googleapis.com/maps/api/staticmap?center=Austin,TX&zoom=1&size=
 
 # This opens the google map in an html file to be viewed in browser
 File.open("googlemaps.html", 'w') do |f|
-  f.write("<h1>Tweets that include #{@search_term} and #{@search_handle}'s followers.")
+  f.write("<h3>Tweets that include #{@search_term} and #{@search_handle}'s followers.</h3>")
   f.write("<img src='#{m}' >")
 end
 
