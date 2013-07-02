@@ -66,7 +66,7 @@ end
 
 #Add the %7 Separator to each Marker entry
 @markers.each do |mark|
-  this_marker = "%7#{mark}"
+  this_marker = "|#{mark}"
   @new_markers << this_marker
 end
 
@@ -76,10 +76,11 @@ t = @new_markers.join('')
 # The combined new URL
 m = "http://maps.googleapis.com/maps/api/staticmap?center=Austin,TX&zoom=1&size=1200x600&markers=size:mid%7Ccolor:red#{t}&sensor=false"
 
-# This opens the google map in an exiting html file to be viewed in browser
-# File.open("googlemaps.html", 'w') do |f|
-#   f.write("#{m}")
-# end
+# This opens the google map in an html file to be viewed in browser
+File.open("googlemaps.html", 'w') do |f|
+  f.write("<h1>Tweets that include #{@search_term} and #{@search_handle}'s followers.")
+  f.write("<img src='#{m}' >")
+end
 
 
 
