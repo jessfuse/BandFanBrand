@@ -5,8 +5,8 @@ require 'open-uri'
 Twitter.configure do |config|
 	config.consumer_key = ""
 	config.consumer_secret = ""
-	config.oauth_token = "800795408-UEyxcaeOXq1AY7Afk87Sa9kVBS9g5DpBwSjyTtLH"
-	config.oauth_token_secret = "tGftA5wfG2dxOKCWiAbByvaVt7lMO7bf6utwqqqM"
+	config.oauth_token = ""
+	config.oauth_token_secret = ""
 end
 
 # Array for Handles 
