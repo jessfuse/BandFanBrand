@@ -5,8 +5,8 @@ require 'open-uri'
 Twitter.configure do |config|
 	config.consumer_key = ""
 	config.consumer_secret = ""
-	config.oauth_token = ""
-	config.oauth_token_secret = ""
+	config.oauth_token = "800795408-UEyxcaeOXq1AY7Afk87Sa9kVBS9g5DpBwSjyTtLH"
+	config.oauth_token_secret = "tGftA5wfG2dxOKCWiAbByvaVt7lMO7bf6utwqqqM"
 end
 
 # Array for Handles 
@@ -14,6 +14,12 @@ tweeter_array_1 = []
 
 # Array for Locations
 @MasterBlaster = []
+
+# Array for Markers
+@markers = []
+
+# Array for Newly Joined Markers
+@new_markers = []
 
 #User Input Dialogue
 puts "What band or album do you want to look for?"
@@ -32,9 +38,17 @@ end
 # Google Locator 
 def google_locater(location)
   address_from_user = "#{location}"
-  uri = "https://maps.googleapis.com/maps/api/geocode/json?address=#{address_from_user.gsub(' ', '%20')}&sensor=false"
+  @usable_address = ""
+  if address_from_user != ""
+    @usable_address = address_from_user
+  else
+    @usable_address = "none"
+  end
+  uri = "https://maps.googleapis.com/maps/api/geocode/json?address=#{@usable_address.gsub(' ', '%20').gsub('ÜT:', '')}&sensor=false"
   response = open(uri).read
-  return JSON.parse(response)["results"][0]["formatted_address"]
+  final_address = JSON.parse(response)["results"][0]["formatted_address"]
+  @markers.push(final_address)
+  return final_address
 end
 
 # Find Twitter followers of an artist
@@ -49,7 +63,23 @@ tweeter_array_1.each do |handle|
   @MasterBlaster << { :user_name => handle, :location => location_entry }
 end
 
-puts @MasterBlaster
+
+#Add the %7 Separator to each Marker entry
+@markers.each do |mark|
+  this_marker = "%7#{mark}"
+  @new_markers << this_marker
+end
+
+#Joining the markers 
+t = @new_markers.join('')
+
+# The combined new URL
+m = "http://maps.googleapis.com/maps/api/staticmap?center=Austin,TX&zoom=1&size=1200x600&markers=size:mid%7Ccolor:red#{t}&sensor=false"
+
+# This opens the google map in an exiting html file to be viewed in browser
+# File.open("googlemaps.html", 'w') do |f|
+#   f.write("#{m}")
+# end
 
 
 
