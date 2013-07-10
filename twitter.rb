@@ -4,10 +4,10 @@ require 'open-uri'
 require 'pry'
 
 Twitter.configure do |config|
-	config.consumer_key = "WGKsIyF1bIgyMzyOyfPlUw"
-	config.consumer_secret = "opQAAE16rGBMhSN9RhHR2w3rbnLPku4G83kaKChyyI"
-	config.oauth_token = "499825106-3OUNfxYMxxhXXlfVq4Nqx5aeSjwwhainYIbDkR5i"
-	config.oauth_token_secret = "jlDv0dzbckoV1YT8LpqlvjAqozU6lFmXYKLOYDW8"
+	config.consumer_key = ""
+	config.consumer_secret = ""
+	config.oauth_token = ""
+	config.oauth_token_secret = ""
 end
 
 # Array for Handles 
