@@ -2,12 +2,13 @@ require 'twitter'
 require 'json'
 require 'open-uri'
 require 'pry'
+require 'uri'
 
 Twitter.configure do |config|
-	config.consumer_key = ""
-	config.consumer_secret = ""
-	config.oauth_token = ""
-	config.oauth_token_secret = ""
+	config.consumer_key = "WGKsIyF1bIgyMzyOyfPlUw"
+	config.consumer_secret = "opQAAE16rGBMhSN9RhHR2w3rbnLPku4G83kaKChyyI"
+	config.oauth_token = "499825106-3OUNfxYMxxhXXlfVq4Nqx5aeSjwwhainYIbDkR5i"
+	config.oauth_token_secret = "jlDv0dzbckoV1YT8LpqlvjAqozU6lFmXYKLOYDW8"
 end
 
 # Array for Handles 
@@ -24,13 +25,22 @@ tweeter_array_1 = []
 
 #User Input Dialogue
 puts "What band or album do you want to look for?"
-@search_term = "#" + gets.chomp!
+search_term_1 = gets.chomp!
+if search_term_1[0] == "#"
+  @search_term = search_term_1[1..-1]
+else 
+  @search_term = search_term_1
+end
 puts "Cool.  Wait a second for the results."
-# puts "What is the Twitter handle of the band?"
-# @search_handle = gets.chomp!
-# puts "Cool.  Wait a second for the results."
-# puts @search_term
-# puts @search_handle
+
+puts "What is the Twitter handle of the band?"
+search_handle_1 = gets.chomp!
+if search_handle_1[0] == "@"
+  @search_handle = search_handle_1[1..-1]
+else
+  @search_handle = search_handle_1
+end
+puts "Cool.  Wait a second for the results."
 
 # Use search to find handles
 Twitter.search("#{@search_term}", :lang => "en", :count => 20).results.each do |tweet|
@@ -46,8 +56,8 @@ def google_locater(location)
   else
     @usable_address = "none"
   end
-  uri = "https://maps.googleapis.com/maps/api/geocode/json?address=#{@usable_address.gsub(' ', '%20').gsub('ÜT:', '')}&sensor=false"
-  response = open(uri).read
+  uri_clean = URI.escape("https://maps.googleapis.com/maps/api/geocode/json?address=#{@usable_address}&sensor=false")
+  response = open(uri_clean).read
   parsed_response = JSON.parse(response)
   if parsed_response["results"].empty?
     return nil
@@ -60,10 +70,10 @@ end
 
 
 # Find Twitter followers of an artist
-# Twitter.followers("#{@search_handle}").each do |guy|
-#   location_entry = google_locater(guy.location)
-#   @MasterBlaster << {:user_name => guy.screen_name, :location => location_entry}
-# end
+Twitter.followers("#{@search_handle}").each do |guy|
+  location_entry = google_locater(guy.location)
+  @MasterBlaster << {:user_name => guy.screen_name, :location => location_entry}
+end
 
 # Find location based on handle
 tweeter_array_1.each do |handle|
@@ -82,11 +92,14 @@ end
 t = @new_markers.join('')
 
 # The combined new URL
-m = "http://maps.googleapis.com/maps/api/staticmap?center=Austin,TX&zoom=1&size=1200x600&markers=size:mid%7Ccolor:red#{t}&sensor=false"
+m = "http://maps.googleapis.com/maps/api/staticmap?center=Austin,TX&zoom=1&size=640x600&markers=size:mid%7Ccolor:red#{t}&sensor=false"
 
 # This opens the google map in an html file to be viewed in browser
-File.open("googlemaps.html", 'w') do |f|
-  f.write("<h3>Tweets that include #{@search_term} and #{@search_handle}'s followers.</h3>")
+File.open("googlemaps.html", 'a+') do |f|
+  f.write("<h3>Here is a map of your tweeters and followers:</h3>") 
+  f.write("<h3>Search Term: #{@search_term}</h3>")
+  f.write("<h3>Search Handle: #{@search_handle}</h3>")
+  f.write("<br />")
   f.write("<img src='#{m}' >")
 end
 

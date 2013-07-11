@@ -1,0 +1,10 @@
+h3 {
+  padding-left: 10px;
+  margin-top: 20px;
+}
+img {
+  clip:rect(500px,500px,500px,500px);
+  margin-left: 25%;
+  box-shadow: 0px 0px 15px black;
+  border-radius: 10px;
+}
